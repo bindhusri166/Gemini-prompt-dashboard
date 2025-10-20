@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI 5-Day Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 8px;
+            margin: 30px auto;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4285f4, #34a853);
+            height: 30px;
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .challenge-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .challenge-card:nth-child(1) { animation-delay: 0.1s; }
+        .challenge-card:nth-child(2) { animation-delay: 0.2s; }
+        .challenge-card:nth-child(3) { animation-delay: 0.3s; }
+        .challenge-card:nth-child(4) { animation-delay: 0.4s; }
+        .challenge-card:nth-child(5) { animation-delay: 0.5s; }
+
+        .challenge-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .challenge-card.completed {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .day-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .challenge-card.completed .day-badge {
+            background: linear-gradient(135deg, #34a853, #0f9d58);
+        }
+
+        .challenge-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .google-logo {
+            width: 30px;
+            height: 30px;
+        }
+
+        .challenge-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .challenge-link {
+            display: block;
+            color: #4285f4;
+            text-decoration: none;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.85em;
+            word-break: break-all;
+            transition: all 0.3s ease;
+        }
+
+        .challenge-link:hover {
+            background: #e8f0fe;
+            transform: translateX(5px);
+        }
+
+        .link-label {
+            font-weight: bold;
+            color: #5f6368;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ffa726;
+        }
+
+        .challenge-card.completed .status-dot {
+            background: #4caf50;
+        }
+
+        .status-text {
+            color: #ff6f00;
+        }
+
+        .challenge-card.completed .status-text {
+            color: #2e7d32;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            color: white;
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(66, 133, 244, 0.6);
+        }
+
+        .btn-secondary {
+            background: #f1f3f4;
+            color: #5f6368;
+        }
+
+        .btn-secondary:hover {
+            background: #e8eaed;
+        }
+
+        .challenge-card.completed .btn-primary {
+            background: linear-gradient(135deg, #34a853, #0f9d58);
+        }
+
+        .checkmark {
+            display: none;
+        }
+
+        .challenge-card.completed .checkmark {
+            display: inline-block;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #4caf50;
+            font-size: 2em;
+        }
+
+        .magic-sparkle {
+            display: inline-block;
+            animation: sparkle 1.5s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Gemini AI 5-Day Challenge</h1>
+            <p>Complete all challenges to master AI-powered prompts!</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0% Complete</div>
+            </div>
+        </div>
+
+        <div class="challenges-grid" id="challengesGrid">
+            <!-- Challenges will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const challenges = [
+            {
+                day: 1,
+                title: "Creative Writing Assistant",
+                description: "Unlock your creativity! Use Gemini to generate compelling stories, poetry, or creative content. Perfect for writers, marketers, and content creators looking to enhance their storytelling skills.",
+                url: "https://aiskillshouse.com/student/qr-mediator?uid=2170&promptId=22"
+            },
+            {
+                day: 2,
+                title: "Code Helper & Debugger",
+                description: "Boost your coding productivity! Let Gemini help you write, debug, and optimize code in any programming language. Ideal for developers seeking intelligent coding assistance.",
+                url: "https://gemini.google.com/app?prompt_id=kTK0czBouxty&prompt_action=autosubmit&utm_source=prompt_9&utm_medium=social&utm_campaign=in_q3_2025_student_ambassador_1273_autosubmit"
+            },
+            {
+                day: 3,
+                title: "Research & Analysis Expert",
+                description: "Dive deep into any topic! Use Gemini to research, analyze, and summarize complex information. Perfect for students, researchers, and professionals needing comprehensive insights.",
+                url: "https://aiskillshouse.com/student/qr-mediator?uid=2170&promptId=20"
+            },
+            {
+                day: 4,
+                title: "Language Translator & Tutor",
+                description: "Break language barriers! Practice conversations, translate text, and learn new languages with Gemini's multilingual capabilities. Great for language learners and global communicators.",
+                url: "https://gemini.google.com/app?prompt_action=autosubmit&utm_source=prompt_7&utm_medium=social&utm_campaign=in_q3_2025_student_ambassador_1273_autosubmit"
+            },
+            {
+                day: 5,
+                title: "Business Strategy Advisor",
+                description: "Elevate your business decisions! Get strategic insights, market analysis, and business planning assistance from Gemini. Essential for entrepreneurs and business professionals.",
+                url: "https://aiskillshouse.com/student/qr-mediator?uid=2170&promptId=18"
+            }
+        ];
+
+        // Load completed challenges from memory
+        let completedChallenges = {};
+
+        function updateProgress() {
+            const completed = Object.keys(completedChallenges).length;
+            const total = challenges.length;
+            const percentage = Math.round((completed / total) * 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = percentage + '% Complete';
+        }
+
+        function markCompleted(day) {
+            completedChallenges[day] = true;
+            renderChallenges();
+            updateProgress();
+        }
+
+        function resetChallenge(day) {
+            delete completedChallenges[day];
+            renderChallenges();
+            updateProgress();
+        }
+
+        function renderChallenges() {
+            const grid = document.getElementById('challengesGrid');
+            grid.innerHTML = '';
+
+            challenges.forEach(challenge => {
+                const isCompleted = completedChallenges[challenge.day];
+                
+                const card = document.createElement('div');
+                card.className = `challenge-card ${isCompleted ? 'completed' : ''}`;
+                
+                card.innerHTML = `
+                    <span class="checkmark">✓</span>
+                    <div class="day-badge">Day ${challenge.day} Challenge</div>
+                    <h2 class="challenge-title">
+                        <svg class="google-logo" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        ${challenge.title}
+                    </h2>
+                    <div class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">${isCompleted ? 'Completed!' : 'Pending'}</span>
+                    </div>
+                    <p class="challenge-description">${challenge.description}</p>
+                    <a href="${challenge.url}" class="challenge-link" target="_blank" onclick="handleChallenge(${challenge.day})">
+                        <span class="link-label">🔗 Challenge Link:</span>
+                        ${challenge.url}
+                    </a>
+                    <div class="action-buttons">
+                        <a href="${challenge.url}" class="btn btn-primary" target="_blank" onclick="handleChallenge(${challenge.day})">
+                            <span class="magic-sparkle">✨</span>
+                            ${isCompleted ? 'Try Again' : 'Start Challenge'}
+                        </a>
+                        ${isCompleted ? '<button class="btn btn-secondary" onclick="resetChallenge(' + challenge.day + ')">Reset</button>' : ''}
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function handleChallenge(day) {
+            setTimeout(() => {
+                markCompleted(day);
+            }, 1000);
+        }
+
+        // Initialize
+        renderChallenges();
+        updateProgress();
+    </script>
+</body>
+</html>
